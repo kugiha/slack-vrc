@@ -10,7 +10,9 @@ def get_releaseStatus_emoji(releaseStatus):
         return ':globe_with_meridians:'
 
 @respond_to('vrconline')
-def mention_func(message):
+@respond_to('online')
+@respond_to('on')
+def online(message):
     with open('./vrc_api_credentials.txt') as f:
         a = VRChatAPI(
             f.readline().rstrip('\r\n'),
