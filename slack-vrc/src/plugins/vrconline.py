@@ -1,6 +1,7 @@
 from slackbot.bot import respond_to
 from vrchat_api import VRChatAPI
 from vrchat_api.enum import ReleaseStatus
+from auth import a
 
 def get_releaseStatus_emoji(releaseStatus):
     if releaseStatus==ReleaseStatus.PRIVATE:
@@ -13,12 +14,6 @@ def get_releaseStatus_emoji(releaseStatus):
 @respond_to('online')
 @respond_to('on')
 def online(message):
-    with open('./vrc_api_credentials.txt') as f:
-        a = VRChatAPI(
-            f.readline().rstrip('\r\n'),
-            f.readline().rstrip('\r\n')
-        )
-    a.authenticate()
     friends = a.getFriends()
     reply = '\nYour online friends:'
     for f in friends:
