@@ -54,7 +54,7 @@ def online_grouped(message):
         for user in users:
             reply += '*{}*, '.format(user.displayName)
         reply = reply[:-2]
-        reply += ' _in {}{}_\n'.format(world.name, get_releaseStatus_emoji(world.releaseStatus))
+        reply += ' _in {}{}_ (?/{})\n'.format(world.name, get_releaseStatus_emoji(world.releaseStatus), world.capacity)
     reply += 'in-private friends\n'
     for user in private_users:
         reply += '{},'.format(user.displayName)
