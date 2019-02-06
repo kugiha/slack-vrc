@@ -2,7 +2,6 @@ from slackbot.bot import respond_to
 from vrchat_api import VRChatAPI
 from vrchat_api.enum import ReleaseStatus
 from auth import a
-import re
 
 def get_releaseStatus_emoji(releaseStatus):
     if releaseStatus==ReleaseStatus.PRIVATE:
