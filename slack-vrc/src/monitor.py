@@ -44,8 +44,8 @@ class UserMonitor:
         if (self.monitor_type == UserMonitorType.PRIVATE) and (old.private != new.private):
             self.message.reply('{}\n>Private: {} -> `{}`'.format(str(self), old.private, new.private))
         if (self.monitor_type == UserMonitorType.WORLD_MOVE) and (old.worldId != new.worldId):
-            old_worldname = a.getWorldById(old.worldId).name if old.worldId is not None else ':lock:'
-            new_worldname = a.getWorldById(new.worldId).name if new.worldId is not None else ':lock:'
+            old_worldname = a.getWorldById(old.worldId).name if old.worldId is not None else '(private)'
+            new_worldname = a.getWorldById(new.worldId).name if new.worldId is not None else '(private)'
             self.message.reply('{}\n>{} -> `{}`'.format(str(self), old_worldname, new_worldname))
     def __str__(self):
         return '{} for {}'.format(self.user.displayName, self.monitor_type)
