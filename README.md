@@ -8,6 +8,7 @@ Slack bot for VRC
 The following libraries are used in this repository.
 - vrchat-api-python-master
 - slackbot
+Thank you!
 
 ## Usage
 I will write this section later.
