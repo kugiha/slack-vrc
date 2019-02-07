@@ -18,6 +18,17 @@ def monitor_user(message, mode, displayName):
         return
     user_monitor = UserMonitor(user, monitor_type, message)
 
+@respond_to('^monitor-all (.*)$')
+@respond_to('^ma (.*)$')
+def monitor_user_all(message, mode):
+    message.reply('Setting monitor...')
+    monitor_type = UserMonitorType.getUserMonitorTypeByString(mode)
+    if monitor_type is None:
+        message.reply('No such mode')
+        return
+    for f in get_all_friends():
+        user_monitor = UserMonitor(f, monitor_type, message)
+
 def get_friend_by_display_name(displayName):
     for f in get_all_friends():
         print(f.displayName)
