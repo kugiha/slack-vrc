@@ -6,7 +6,7 @@ from monitor import UserMonitor, UserMonitorType
 
 @respond_to('^monitor (.*) (.*)$')
 @respond_to('^m (.*) (.*)$')
-def online(message, mode, displayName):
+def monitor_user(message, mode, displayName):
     message.reply('Setting monitor...')
     monitor_type = UserMonitorType.getUserMonitorTypeByString(mode)
     if monitor_type is None:
