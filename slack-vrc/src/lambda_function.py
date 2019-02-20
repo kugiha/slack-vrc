@@ -47,10 +47,7 @@ from utils import respond
 from main import run_command
 
 
-ENCRYPTED_EXPECTED_TOKEN = os.environ['kmsEncryptedToken']
-
-kms = boto3.client('kms')
-expected_token = kms.decrypt(CiphertextBlob=b64decode(ENCRYPTED_EXPECTED_TOKEN))['Plaintext'].decode()
+expected_token = os.environ['kmsEncryptedToken']
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
