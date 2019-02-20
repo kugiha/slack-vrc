@@ -11,7 +11,7 @@ jobs:
           name: Install dependencies
           command: |
             pip install -r ./slack-vrc/requirements.txt -t ./slack-vrc/src
-            pip install ./slack-vrc/vrchat-api-python -t ./slack-vrc/src
+            pip install ./slack-vrc/vrchat-api-python-master -t ./slack-vrc/src
       - run:
           name: Compress /slack-vrc/src/
           command: |
