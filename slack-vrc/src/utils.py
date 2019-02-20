@@ -1,5 +1,5 @@
 import json
-from ..utils import get_releaseStatus_emoji
+from vrchat_api.enum import ReleaseStatus
 def respond(err, res=None):
     return {
         'statusCode': '400' if err else '200',
