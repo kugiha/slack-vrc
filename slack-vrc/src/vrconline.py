@@ -1,5 +1,5 @@
-from ..utils import get_releaseStatus_emoji
-from ..vrc_auth import vrc
+from utils import get_releaseStatus_emoji
+from vrc_auth import vrc
 
 def online():
     friends = vrc.getFriends()
