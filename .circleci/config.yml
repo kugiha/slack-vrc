@@ -17,7 +17,7 @@ jobs:
           command: |
             apt-get update
             apt-get install -y zip
-            cd src
+            cd slack-vrc/src
             chmod 755 ./* -R
             mkdir -p /tmp/workspace
             zip -r /tmp/workspace/src *
