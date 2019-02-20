@@ -3,7 +3,7 @@ from vrchat_api.enum import ReleaseStatus
 def respond(err, res=None):
     return {
         'statusCode': '400' if err else '200',
-        'body': err.message if err else json.dumps(res),
+        'body': err.message if err else json.dumps(res, ensure_ascii=False),
         'headers': {
             'Content-Type': 'application/json',
         },
