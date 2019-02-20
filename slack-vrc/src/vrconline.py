@@ -11,6 +11,6 @@ def online():
             reply += '*{}* :lock:'.format(f.displayName)
         else:
             # public, friends+, etc...
-            world = vrc.getWorldById(f.location.worldId)
+            world = a.getWorldById(f.location.worldId)
             reply += '*{}* _in {}{}_'.format(f.displayName, world.name, get_releaseStatus_emoji(world.releaseStatus))
     return reply
