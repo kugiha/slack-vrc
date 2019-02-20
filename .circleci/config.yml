@@ -1,0 +1,69 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: python:3-slim
+        environment:
+          TZ: Asia/Tokyo
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            pip install -r ./slack-vrc/requirements.txt -t ./slack-vrc/src
+            pip install ./slack-vrc/vrchat-api-python -t ./slack-vrc/src
+      - run:
+          name: Compress /slack-vrc/src/
+          command: |
+            apt-get update
+            apt-get install -y zip
+            cd src
+            chmod 755 ./* -R
+            mkdir -p /tmp/workspace
+            zip -r /tmp/workspace/src *
+      - store_artifacts:
+          path: /tmp/workspace/src.zip
+          destination: src.zip
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - src.zip
+  release:
+    docker:
+      - image: python:3-slim
+        environment:
+          TZ: Asia/Tokyo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Install libraries
+          command: |
+            echo "deb http://ftp.debian.org/debian stretch-backports main" >> /etc/apt/sources.list
+            apt-get update
+            apt-get -t stretch-backports install -y git golang
+            export GOPATH=$HOME/go
+            echo 'export PATH='"$GOPATH"'/bin:$PATH' >> $BASH_ENV
+            go get github.com/tcnksm/ghr
+      - run:
+          name: Release
+          command: |
+            VERSION=$(git describe)
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /tmp/workspace/src.zip
+workflows:
+  version: 2
+  build_and_release:
+    jobs:
+      - build
+      - hold:
+          type: approval
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+      - release:
+          requires:
+            - hold
