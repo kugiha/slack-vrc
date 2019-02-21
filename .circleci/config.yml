@@ -10,24 +10,33 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            pip install -r ./slack-vrc/requirements.txt -t ./slack-vrc/src
-            pip install ./slack-vrc/vrchat-api-python-master -t ./slack-vrc/src
+            pip install -r ./slack-vrc/requirements.txt -t ./slack-vrc/sp
+            pip install ./slack-vrc/vrchat-api-python-master -t ./slack-vrc/sp
+            pip install -r ./slack-vrc/requirements.txt -t ./slack-vrc/fsf
+            pip install ./slack-vrc/vrchat-api-python-master -t ./slack-vrc/fsf
       - run:
-          name: Compress /slack-vrc/src/
+          name: Compress *_lambda_upload.zip
           command: |
             apt-get update
             apt-get install -y zip
-            cd slack-vrc/src
+            cd slack-vrc/sp
             chmod 755 ./* -R
             mkdir -p /tmp/workspace
-            zip -r /tmp/workspace/src *
+            zip -r /tmp/workspace/sp *
+            cd slack-vrc/fsf
+            chmod 755 ./* -R
+            zip -r /tmp/workspace/fsf *
       - store_artifacts:
-          path: /tmp/workspace/src.zip
-          destination: src.zip
+          path: /tmp/workspace/sp.zip
+          destination: sp_lambda_upload.zip
+      - store_artifacts:
+          path: /tmp/workspace/fsf.zip
+          destination: fsf_lambda_upload.zip
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
-            - src.zip
+            - sp.zip
+            - fsf.zip
   release:
     docker:
       - image: python:3-slim
@@ -50,7 +59,7 @@ jobs:
           name: Release
           command: |
             VERSION=$(git describe)
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /tmp/workspace/src.zip
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /tmp/workspace
 workflows:
   version: 2
   build_and_release:
