@@ -23,7 +23,7 @@ jobs:
             chmod 755 ./* -R
             mkdir -p /tmp/workspace
             zip -r /tmp/workspace/sp *
-            cd slack-vrc/fsf
+            cd ../fsf
             chmod 755 ./* -R
             zip -r /tmp/workspace/fsf *
       - store_artifacts:
