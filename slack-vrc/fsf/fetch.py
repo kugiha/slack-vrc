@@ -2,6 +2,8 @@ from vrc_auth import vrc
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 table_name = "slackvrc_friend_status"
+dynamodb = boto3.resource('dynamodb')
+dynamotable = dynamodb.Table(table_name)
 def lambda_handler(_, __):
     friends = vrc.getFriends(offline=False)
     friends.extend(vrc.getFriends(offline=True))
@@ -23,9 +25,8 @@ def lambda_handler(_, __):
                 row['instance_id'] = f.location.instanceId
                 world = vrc.getWorldById(f.location.worldId)
                 instance = vrc.getInstanceById(f.location.worldId, f.location.instanceId)
+        save_to_db(row)
 def save_to_db(payload):
-    dynamodb = boto3.resource('dynamodb')
-    dynamotable = dynamodb.Table(table_name)
     try:
         res = dynamotable.put_item(
             Item = payload
