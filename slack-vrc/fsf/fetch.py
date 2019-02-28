@@ -24,7 +24,7 @@ def lambda_handler(_, __):
                 row['instance_id'] = f.location.instanceId
                 world = vrc.getWorldById(f.location.worldId)
                 row['world_name'] = world.name
-                row['world_thumbnailImageURL'] = world.thumbnailImageURL
+                row['world_thumbnailImageURL'] = getattr(world, 'thumbnailImageURL', None)
                 row['world_capacity'] = world.capacity
                 instance = vrc.getInstanceById(f.location.worldId, f.location.instanceId)
                 row['instance_users_count'] = len(instance.users)
