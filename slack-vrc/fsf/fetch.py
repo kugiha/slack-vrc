@@ -29,6 +29,12 @@ def lambda_handler(_, __):
                 row['world_name'] = world.name
                 row['world_thumbnailImageURL'] = getattr(world, 'thumbnailImageURL', None)
                 row['world_capacity'] = world.capacity
+                if world.friends:
+                    row['world_type'] = 'friends'
+                elif world.hidden:
+                    row['world_type'] = 'hidden'
+                else:
+                    row['world_type'] = 'unknown'
                 instance = vrc.getInstanceById(f.location.worldId, f.location.instanceId)
                 row['instance_users_count'] = len(instance.users)
         save_to_db(row)
