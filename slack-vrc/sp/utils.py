@@ -8,9 +8,12 @@ def respond(err, res=None):
             'Content-Type': 'application/json',
         },
     }
-def get_releaseStatus_emoji(releaseStatus):
-    if releaseStatus==ReleaseStatus.PRIVATE:
-        # It says private, but it's something like friends+
+def get_instanceStatus_emoji(instanceStatus):
+    if instanceStatus=='private':
+        return ':lock:'
+    if instanceStatus=='friends':
+        return ':heart:'
+    if instanceStatus=='hidden':
         return ':family:'
-    if releaseStatus==ReleaseStatus.PUBLIC:
+    if instanceStatus=='public':
         return ':globe_with_meridians:'

@@ -1,4 +1,4 @@
-from utils import get_releaseStatus_emoji
+from utils import get_instanceStatus_emoji
 from vrc_auth import vrc
 from fetch_from_db import getOnlineFriends
 
@@ -12,7 +12,7 @@ def online():
             reply += '*{}* :lock:'.format(f['name'])
         else:
             # public, friends+, etc...
-            reply += '*{}* _in {}_'.format(f['name'], f['world_name'])
+            reply += '*{}* _in {}_{}'.format(f['name'], f['world_name'], get_instanceStatus_emoji(f['instance_type']))
     return reply
 
 def online_grouped():
@@ -36,7 +36,7 @@ def online_grouped():
         for user in users:
             reply += '*{}*, '.format(user['name'])
         reply = reply[:-2]
-        reply += ' _in {}_ ({}/{})\n'.format(users[0]['world_name'], users[0]['instance_users_count'], users[0]['world_capacity'])
+        reply += ' _in {}_ ({}/{}) {}\n'.format(users[0]['world_name'], users[0]['instance_users_count'], users[0]['world_capacity'], get_instanceStatus_emoji(users[0]['instance_type']))
     reply += 'in-private friends\n'
     for user in private_users:
         reply += '{},'.format(user['name'])
