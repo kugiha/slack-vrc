@@ -11,7 +11,7 @@ def lambda_handler(_, __):
         row = {
             'player_id': f.id,
             'player_username': f.username,
-            'player_name': f.displayName # displayName
+            'name': f.displayName # displayName
         }
         if f.location.offline:
             row['status'] = 'offline'
