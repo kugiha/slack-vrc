@@ -7,7 +7,7 @@ def online():
     reply = '\nYour online friends:'
     for f in friends:
         reply += '\n* '
-        if f['world_type']=='private':
+        if f.get('world_type')=='private':
             # private
             reply += '*{}* :lock:'.format(f['name'])
         else:
@@ -20,7 +20,7 @@ def online_grouped():
     users_by_world = {}
     private_users = []
     for f in friends:
-        if f['world_type']=='private':
+        if f.get('world_type')=='private':
             # private
             private_users.append(f)
         else:
