@@ -1,7 +1,8 @@
+import os
 import time
 from vrc_auth import vrc
 import boto3
-table_name = "slackvrc_friend_status"
+table_name = os.environ['slackvrc_friend_status']
 dynamodb = boto3.resource('dynamodb')
 dynamotable = dynamodb.Table(table_name)
 def lambda_handler(_, __):
