@@ -1,3 +1,4 @@
+import time
 from vrc_auth import vrc
 import boto3
 table_name = "slackvrc_friend_status"
@@ -10,7 +11,8 @@ def lambda_handler(_, __):
         row = {
             'player_id': f.id,
             'player_username': f.username,
-            'name': f.displayName # displayName
+            'name': f.displayName, # displayName
+            'updated_at': int(time.time())
         }
         if f.location.offline:
             row['status'] = 'offline'
