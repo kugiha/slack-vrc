@@ -20,7 +20,7 @@ def lambda_handler(_, __):
         else:
             row['status'] = 'online'
             if f.location.private:
-                row['world_type'] = 'private'
+                row['instance_type'] = 'private'
             else:
                 # public, friends+, etc...
                 row['world_id'] = f.location.worldId
@@ -29,14 +29,14 @@ def lambda_handler(_, __):
                 row['world_name'] = world.name
                 row['world_thumbnailImageURL'] = getattr(world, 'thumbnailImageURL', None)
                 row['world_capacity'] = world.capacity
-                if world.friends:
-                    row['world_type'] = 'friends'
-                elif world.hidden:
-                    row['world_type'] = 'hidden'
-                else:
-                    row['world_type'] = 'unknown'
                 instance = vrc.getInstanceById(f.location.worldId, f.location.instanceId)
                 row['instance_users_count'] = len(instance.users)
+                if instance.friends:
+                    row['instance_type'] = 'friends'
+                elif instance.hidden:
+                    row['instance_type'] = 'hidden'
+                else:
+                    row['instance_type'] = 'unknown'
         save_to_db(row)
 def save_to_db(payload):
     try:
