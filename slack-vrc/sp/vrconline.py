@@ -25,10 +25,10 @@ def online_grouped():
             private_users.append(f)
         else:
             # public, friends+, etc...
-            if f['world_id'] not in users_by_world.keys():
-                users_by_world[f['world_id']] = []
-            users_by_world[f['world_id']].append(f)
-    users_by_world = sorted(users_by_world.items(), key=lambda x: -len(x[1])) # {'world_id': [users array]}
+            if f['instance_id'] not in users_by_world.keys():
+                users_by_world[f['instance_id']] = []
+            users_by_world[f['instance_id']].append(f)
+    users_by_world = sorted(users_by_world.items(), key=lambda x: -len(x[1])) # {'instance_id': [users array]}
     reply = '\nOnline friends (grouped)\n'
     for item in users_by_world:
         reply += '* '
