@@ -36,7 +36,7 @@ def lambda_handler(_, __):
                 elif instance.hidden:
                     row['instance_type'] = 'hidden'
                 else:
-                    row['instance_type'] = 'unknown'
+                    row['instance_type'] = 'public'
         save_to_db(row)
 def save_to_db(payload):
     try:
