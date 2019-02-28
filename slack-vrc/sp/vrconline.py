@@ -1,8 +1,9 @@
 from utils import get_releaseStatus_emoji
 from vrc_auth import vrc
+from fetch_from_db import getOnlineFriends
 
 def online():
-    friends = vrc.getFriends()
+    friends = getOnlineFriends()
     reply = '\nYour online friends:'
     for f in friends:
         reply += '\n* '
@@ -16,7 +17,7 @@ def online():
     return reply
 
 def online_grouped():
-    friends = vrc.getFriends()
+    friends = getOnlineFriends()
     users_by_world = {}
     private_users = []
     for f in friends:
