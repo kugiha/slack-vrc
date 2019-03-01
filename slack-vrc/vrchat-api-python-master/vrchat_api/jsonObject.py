@@ -63,7 +63,11 @@ class World(JsonObject):
 
 class Instance(JsonObject):
     def __init__(self, j):
-        setattr(self, "friends", [User(x) for x in j["friends"]] if j["friends"] != False else [])
+        try:
+            # Because `J` can be string, this exception is intentionally ignored, and assign the `j` value as it is instead.
+            setattr(self, "friends", [User(x) for x in j["friends"]] if j["friends"] != False else [])
+        except:
+            setattr(self, "friends", j)
         setattr(self, "users", [User(x) for x in j["users"]] if j["users"] != False else [])
         super().__init__(j)
 
