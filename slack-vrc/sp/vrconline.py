@@ -1,5 +1,4 @@
 from utils import get_instanceStatus_emoji
-from vrc_auth import vrc
 from fetch_from_db import getOnlineFriends
 
 def online():
