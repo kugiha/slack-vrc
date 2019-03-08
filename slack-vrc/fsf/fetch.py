@@ -85,15 +85,15 @@ def fetch_instance_if_needed(worldId, instanceId):
     row = {
         'instance_id_concatenated_with_world_id':
         get_instance_id_concatenated_with_world_id(worldId, instanceId),
-        'instance_users_count':
+        'users_count':
         len(instance.users)
     }
     if instance.friends:
-        row['instance_type'] = 'friends'
+        row['type'] = 'friends'
     elif instance.hidden:
-        row['instance_type'] = 'hidden'
+        row['type'] = 'hidden'
     else:
-        row['instance_type'] = 'public'
+        row['type'] = 'public'
     row['update_interval_count'] = 20  # World info rarely changes.
     save_to_db(row, instances_dynamotable)
 
