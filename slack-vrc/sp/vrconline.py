@@ -46,4 +46,4 @@ def online_grouped():
     return reply
 
 def get_as_of_string(updated_at):
-    return datetime.timestamp(updated_at, timezone(timedelta(hours=9))).strftime('%Y-%m-%d %H:%M:%S')
+    return datetime.fromtimestamp(updated_at, timezone(timedelta(hours=9))).strftime('%Y-%m-%d %H:%M:%S')
