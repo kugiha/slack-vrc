@@ -1,9 +1,11 @@
 from utils import get_instanceStatus_emoji
 from fetch_from_db import getOnlineFriends
+from datetime import datetime, timezone, timedelta
 
 def online():
     friends = getOnlineFriends()
-    reply = '\nYour online friends:'
+    as_of_string = get_as_of_string(friends[0]['updated_at'])
+    reply = '\nYour online friends (as of {}):'.format(as_of_string)
     for f in friends:
         reply += '\n* '
         if f.get('instance_type')=='private':
@@ -16,6 +18,7 @@ def online():
 
 def online_grouped():
     friends = getOnlineFriends()
+    as_of_string = get_as_of_string(friends[0]['updated_at'])
     users_by_world = {}
     private_users = []
     for f in friends:
@@ -28,7 +31,7 @@ def online_grouped():
                 users_by_world[f['instance_id']] = []
             users_by_world[f['instance_id']].append(f)
     users_by_world = sorted(users_by_world.items(), key=lambda x: -len(x[1])) # {'instance_id': [users array]}
-    reply = '\nOnline friends (grouped)\n'
+    reply = '\nOnline friends (grouped) (as of {})\n'.format(as_of_string)
     for item in users_by_world:
         reply += '* '
         users = item[1]
@@ -41,3 +44,6 @@ def online_grouped():
         reply += '{},'.format(user['name'])
     reply = reply[:-1]
     return reply
+
+def get_as_of_string(updated_at):
+    return datetime.timestamp(updated_at, timezone(timedelta(hours=9))).strftime('%Y-%m-%d %H:%M:%S')
