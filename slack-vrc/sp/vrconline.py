@@ -30,7 +30,7 @@ def online_grouped():
     for f in friends:
         world = getWorldInfoById(f['world_id'])
         instance = getInstanceInfoById(f['world_id'], f['instance_id'])
-        if instance['instance_type'] == 'private':
+        if instance['type'] == 'private':
             # private
             private_users.append(f)
         else:
