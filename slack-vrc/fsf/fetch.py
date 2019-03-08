@@ -32,6 +32,8 @@ def lambda_handler(_, __):
                 row['world_id'] = f.location.worldId
                 row['instance_id'] = f.location.instanceId
                 fetch_world_if_needed(f.location.worldId)
+                fetch_instance_if_needed(f.location.worldId,
+                                         f.location.instanceId)
 
         save_to_db(row, friends_table_name)
 
