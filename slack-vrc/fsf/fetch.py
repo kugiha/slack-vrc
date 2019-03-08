@@ -38,37 +38,61 @@ def lambda_handler(_, __):
 
 def fetch_world_if_needed(worldId):
     res = worlds_dynamotable.get_item(Key={'world_id': worldId})
-    if res['Item'] and res['Item']['update_interval_count'] > 0:
+    if 'Item' in res.keys() and res['Item'].get('update_interval_count') > 0:
         worlds_dynamotable.update_item(
             Key={'world_id': worldId},
             UpdateExpression=
             'set update_interval_count = update_interval_count - 1')
         return
-    world = vrc.getWorldById(worldId)
-    row = {}
-    row['name'] = world.name
-    row['thumbnailImageURL'] = getattr(world, 'thumbnailImageURL', None)
-    row['capacity'] = world.capacity
+    try:
+        world = vrc.getWorldById(worldId)
+    except:  # World does not exist in VRChat. Row should be deleted from DB.
+        worlds_dynamotable.delete_item(Key={'world_id': worldId})
+    row = {
+        'world_id': worldId,
+        'name': world.name,
+        'thumbnailImageURL': getattr(world, 'thumbnailImageURL', None),
+        'capacity': world.capacity
+    }
+    row['update_interval_count'] = 50  # World info rarely changes.
+
     save_to_db(row, worlds_dynamotable)
 
 
 def fetch_instance_if_needed(worldId, instanceId):
     res = instances_dynamotable.get_item(Key={'instance_id': instanceId})
-    if res['Item'] and res['Item']['update_interval_count'] > 0:
+    if 'Item' in res.keys() and res['Item'].get('update_interval_count') > 0:
         instances_dynamotable.update_item(
-            Key={'instance_id': instanceId},
+            Key={
+                'instance_id_concatenated_with_world_id':
+                get_instance_id_concatenated_with_world_id(
+                    worldId, instanceId)
+            },
             UpdateExpression=
             'set update_interval_count = update_interval_count - 1')
         return
-    instance = vrc.getInstanceById(worldId, instanceId)
-    row = {}
-    row['instance_users_count'] = len(instance.users)
+    try:
+        instance = vrc.getInstanceById(worldId, instanceId)
+    except:  # Instance does not exist in VRChat. Row should be deleted from DB.
+        instances_dynamotable.delete_item(
+            Key={
+                'instance_id_concatenated_with_world_id':
+                get_instance_id_concatenated_with_world_id(
+                    worldId, instanceId)
+            })
+    row = {
+        'instance_id_concatenated_with_world_id':
+        get_instance_id_concatenated_with_world_id(worldId, instanceId),
+        'instance_users_count':
+        len(instance.users)
+    }
     if instance.friends:
         row['instance_type'] = 'friends'
     elif instance.hidden:
         row['instance_type'] = 'hidden'
     else:
         row['instance_type'] = 'public'
+    row['update_interval_count'] = 20  # World info rarely changes.
     save_to_db(row, instances_dynamotable)
 
 
@@ -81,3 +105,7 @@ def save_to_db(payload, table):
         print("Failed.")
         print(e)
         return
+
+
+def get_instance_id_concatenated_with_world_id(worldId, instanceId):
+    return worldId + '/' + instanceId
